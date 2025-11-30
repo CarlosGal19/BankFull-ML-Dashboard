@@ -2,13 +2,13 @@
 
 import { IModalResultProps } from "@/types/Components";
 
-export default function ModalResult({ result, onClose, loading, booleanResult }: IModalResultProps) {
+export default function ModalResult({ result, onClose, loading, booleanResult, selected_model }: IModalResultProps) {
     const percentage = (result * 100).toFixed(2);
 
     const message =
         booleanResult
-            ? "The user is likely to have subscribed to a long-term deposit."
-            : "The user is unlikely to have subscribed to a long-term deposit.";
+            ? `The user is likely to have subscribed to a long-term deposit using the ${selected_model === "deep_learning" ? "Deep Learning" : "Machine Learning"} model.`
+            : `The user is unlikely to have subscribed to a long-term deposit using the ${selected_model === "deep_learning" ? "Deep Learning" : "Machine Learning"} model.`;
 
     if (loading) {
         return (

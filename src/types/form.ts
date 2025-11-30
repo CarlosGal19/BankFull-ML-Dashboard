@@ -31,4 +31,5 @@ export interface IPredictForm {
     poutcome_id: number;
     month_id?: number;
     day?: number;
+    selected_model?: "machine_learning" | "deep_learning";
 }

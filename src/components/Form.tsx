@@ -13,14 +13,20 @@ export default function PredictForm({ formOptions }: { formOptions: IFormOptions
     const [loading, setLoading] = useState<boolean>(false);
     const [predictionResult, setPredictionResult] = useState<number>(-1);
     const [booleanPrediction, setBooleanPrediction] = useState<boolean | null>(null);
+    const [selectedModel, setSelectedModel] = useState<"machine_learning" | "deep_learning">("machine_learning");
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors }
     } = useForm<IPredictForm>({
         resolver: zodResolver(predictSchema),
     });
+
+    const handleToggleModel = () => {
+        const newModel = selectedModel === "machine_learning" ? "deep_learning" : "machine_learning";
+        setSelectedModel(newModel);
+    }
 
     const onSubmit = async (data: IPredictForm) => {
         try {
@@ -41,12 +47,16 @@ export default function PredictForm({ formOptions }: { formOptions: IFormOptions
                 dataToSend.day = day;
             }
 
+            dataToSend.selected_model = selectedModel;
+
             const res = await axiosInstance.post("/prediction", dataToSend);
             const predictedValue = res.data.predicted_value;
             const booleanPrediction = res.data.final_result;
+            const selected_model = res.data.selected_model;
 
             setPredictionResult(predictedValue);
             setBooleanPrediction(booleanPrediction);
+            setSelectedModel(selected_model);
 
         } catch {
             alert("An error occurred while making the prediction. Please try again.");
@@ -56,7 +66,7 @@ export default function PredictForm({ formOptions }: { formOptions: IFormOptions
     };
 
     if ((predictionResult !== -1 && booleanPrediction !== null) || loading) {
-        return <ModalResult loading={loading} result={predictionResult} booleanResult={booleanPrediction} onClose={() => setPredictionResult(-1)} />;
+        return <ModalResult loading={loading} result={predictionResult} booleanResult={booleanPrediction} selected_model={selectedModel} onClose={() => setPredictionResult(-1)} />;
     }
 
     return (
@@ -232,7 +242,39 @@ export default function PredictForm({ formOptions }: { formOptions: IFormOptions
                         </select>
                         {errors.poutcome_id && <p className="text-red-500 text-sm">{errors.poutcome_id.message}</p>}
                     </div>
-                </div>
+
+                    <div className="col-span-3">
+                        <label className="block text-lg font-medium text-gray-700 mb-1 text-center">
+                            Choose a model
+                        </label>
+
+                        <div className="flex justify-center my-1">
+                            <div className="relative flex items-center gap-2">
+
+                                <span className="text-md text-gray-600">Machine Learning</span>
+
+                                {/* TOGGLE */}
+                                <div
+                                    className="w-12 h-6 bg-gray-300 rounded-full flex items-center px-1 cursor-pointer transition"
+                                    onClick={handleToggleModel}
+                                >
+                                    <div
+                                        className={`
+                        w-5 h-5 rounded-full transition-all duration-300
+                        ${selectedModel === "machine_learning"
+                                                ? "bg-blue-500 translate-x-0"
+                                                : "bg-purple-600 translate-x-6"
+                                            }
+                    `}
+                                    ></div>
+                                </div>
+
+                                <span className="text-md text-gray-600">Deep Learning</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div >
 
                 <button
                     type="submit"

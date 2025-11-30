@@ -14,4 +14,5 @@ export interface IModalResultProps {
     onClose?: () => void;
     loading?: boolean;
     booleanResult?: boolean | null;
+    selected_model?: "machine_learning" | "deep_learning";
 }
