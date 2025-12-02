@@ -19,7 +19,7 @@ export default function Header() {
                 <Link href="/" className="text-3xl font-extrabold text-black tracking-tight hover:text-[#e61d00] transition-colors hover:cursor-default" aria-label="Home">
 
                     <h1>
-                        Logistic Regression Model Dashboard
+                        Logistic Regression & Deep Learning Models Dashboard
                     </h1>
                 </Link>
             </div>

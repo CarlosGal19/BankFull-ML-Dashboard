@@ -1,5 +1,6 @@
 "use client";
-import { thresholdF1ScoreData } from "@/mocks/data";
+import { thresholdF1ScoreDataML } from "@/mocks/dataML";
+import { thresholdF1ScoreDataDL } from "@/mocks/dataDL";
 import {
     LineChart,
     Line,
@@ -12,7 +13,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 
-export default function F1ScoreThresoldGraph() {
+export default function F1ScoreThresoldGraph({ threshold, model }: {threshold: number; model:string }) {
     return (
         <div className="bg-white rounded-2xl shadow-md border border-gray-200 hover:border-[#e61d00]/50 hover:shadow-xl transition-all duration-300 p-6">
             <h2 className="text-3xl font-bold text-center text-black border-b-4 border-[#e61d00] inline-block mb-2 px-4 pb-1">
@@ -22,7 +23,7 @@ export default function F1ScoreThresoldGraph() {
             <div className="w-auto h-[300px]">
                 <ResponsiveContainer>
                     <LineChart
-                        data={thresholdF1ScoreData}
+                        data={model === "ml" ? thresholdF1ScoreDataML : thresholdF1ScoreDataDL}
                         margin={{ top: 20, right: 30, left: 10, bottom: 10 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
@@ -81,12 +82,12 @@ export default function F1ScoreThresoldGraph() {
                             isAnimationActive={false}
                         />
                         <ReferenceLine
-                            x={0.43}
+                            x={threshold}
                             stroke="#000"
                             strokeDasharray="4 3"
                             label={{
                                 position: "top",
-                                value: "Threshold = 0.43",
+                                value: `Threshold = ${threshold}`,
                                 fill: "#000",
                                 fontSize: 13,
                                 fontWeight: 600,

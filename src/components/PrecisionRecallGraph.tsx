@@ -1,5 +1,6 @@
 "use client";
-import { precisionRecallData } from "@/mocks/data";
+import { precisionRecallDataML } from "@/mocks/dataML";
+import { precisionRecallDataDL } from "@/mocks/dataDL";
 import {
     LineChart,
     Line,
@@ -11,7 +12,7 @@ import {
     ResponsiveContainer,
 } from "recharts";
 
-export default function PrecisionRecallGraph() {
+export default function PrecisionRecallGraph({model}: {model: string}) {
     return (
         <div className="bg-white rounded-2xl shadow-md border border-gray-200 hover:border-[#e61d00]/50 hover:shadow-xl transition-all duration-300 p-6">
             <h2 className="text-3xl font-bold text-center text-black border-b-4 border-[#e61d00] inline-block mb-2 px-4 pb-1">
@@ -21,7 +22,7 @@ export default function PrecisionRecallGraph() {
             <div className="w-auto h-[300px]">
                 <ResponsiveContainer>
                     <LineChart
-                        data={precisionRecallData}
+                        data={model === "ml" ? precisionRecallDataML : precisionRecallDataDL}
                         margin={{ top: 20, right: 30, left: 10, bottom: 10 }}
                     >
                         <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
